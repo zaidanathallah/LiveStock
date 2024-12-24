@@ -1,406 +1,471 @@
 <html>
   <head>
     <title>Dashboard LiveStock</title>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="manifest" href="manifest.json">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="manifest" href="manifest.json" />
     <style>
-        /* Style untuk halaman */
-        body {
-            font-family: "Roboto", sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .header h1 {
-            font-size: 2.5em;
-            margin: 0;
-        }
-        .header p {
-            color: #666;
-            margin: 5px 0 20px;
-        }
-        .user-info {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-        }
-        .user-info span {
-            
-            font-size: 1.2em;
-        }
-        .user-info button {
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .user-info button:hover {
-            background-color: #0056b3;
-        }
+      /* Style untuk halaman */
+      body {
+        font-family: "Roboto", sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .header h1 {
+        font-size: 2.5em;
+        margin: 0;
+      }
+      .header p {
+        color: #666;
+        margin: 5px 0 20px;
+      }
+      .user-info {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+      }
+      .user-info span {
+        font-size: 1.2em;
+      }
+      .user-info button {
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .user-info button:hover {
+        background-color: #0056b3;
+      }
+      .summary {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .summary .card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        text-align: center;
+        flex: 1;
+        margin: 0 10px;
+      }
+      .summary .card h3 {
+        margin: 0;
+        font-size: 1.2em;
+        color: #666;
+      }
+      .summary .card p {
+        font-size: 1.5em;
+        margin: 10px 0 0;
+      }
+      .summary .card p.income {
+        color: #28a745;
+      }
+      .summary .card p.expenses {
+        color: #dc3545;
+      }
+      .summary .card p.net-total {
+        color: #333;
+      }
+      .input-form {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        align-items: center;
+      }
+      .input-form input,
+      .input-form select {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin: 0 10px;
+        flex: 1;
+      }
+      .input-form button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .input-form button:hover {
+        background-color: #0056b3;
+      }
+      .categories {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+      .categories .category-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        flex: 1;
+        margin: 10px;
+        min-width: 250px;
+      }
+      .categories .category-card h4 {
+        margin: 0 0 10px;
+        font-size: 1.2em;
+      }
+      .categories .category-card p {
+        margin: 5px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .categories .category-card p span {
+        flex: 1;
+      }
+      .categories .category-card p span:nth-child(2) {
+        margin-right: 20px;
+      }
+      .categories .category-card p .delete-btn {
+        color: #dc3545;
+        cursor: pointer;
+      }
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 4px;
+        display: none;
+      }
+
+      .notification2 {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 4px;
+        display: none;
+      }
+
+      .notification3 {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 4px;
+        display: none;
+      }
+
+      .download-button {
+        margin-top: 20px;
+        text-align: center;
+      }
+      .download-button button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .download-button button:hover {
+        background-color: #0056b3;
+      }
+      .footer {
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+        font-size: 0.9em;
+        color: #666;
+      }
+      .footer a {
+        color: #007bff;
+        text-decoration: none;
+      }
+      .footer a:hover {
+        text-decoration: underline;
+      }
+      @media (max-width: 768px) {
         .summary {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
+          flex-direction: column;
         }
         .summary .card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            text-align: center;
-            flex: 1;
-            margin: 0 10px;
-        }
-        .summary .card h3 {
-            margin: 0;
-            font-size: 1.2em;
-            color: #666;
-        }
-        .summary .card p {
-            font-size: 1.5em;
-            margin: 10px 0 0;
-        }
-        .summary .card p.income {
-            color: #28a745;
-        }
-        .summary .card p.expenses {
-            color: #dc3545;
-        }
-        .summary .card p.net-total {
-            color: #333;
+          margin: 10px 0;
         }
         .input-form {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            align-items: center;
+          flex-direction: column;
         }
-        .input-form input, .input-form select {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            margin: 0 10px;
-            flex: 1;
-        }
+        .input-form input,
+        .input-form select,
         .input-form button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .input-form button:hover {
-            background-color: #0056b3;
+          margin: 10px 0;
         }
         .categories {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
+          flex-direction: column;
         }
         .categories .category-card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            flex: 1;
-            margin: 10px;
-            min-width: 250px;
+          margin: 10px 0;
         }
-        .categories .category-card h4 {
-            margin: 0 0 10px;
-            font-size: 1.2em;
-        }
-        .categories .category-card p {
-            margin: 5px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .categories .category-card p span {
-            flex: 1;
-        }
-        .categories .category-card p span:nth-child(2) {
-            margin-right: 20px;
-        }
-        .categories .category-card p .delete-btn {
-            color: #dc3545;
-            cursor: pointer;
-        }
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #28a745;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 4px;
-            display: none;
-        }
-        .download-button {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .download-button button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .download-button button:hover {
-            background-color: #0056b3;
-        }
-        .footer {
-            position: fixed;
-            bottom: 10px;
-            left: 10px;
-            font-size: 0.9em;
-            color: #666;
-        }
-        .footer a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        .footer a:hover {
-            text-decoration: underline;
-        }
-        @media (max-width: 768px) {
-            .summary {
-                flex-direction: column;
-            }
-            .summary .card {
-                margin: 10px 0;
-            }
-            .input-form {
-                flex-direction: column;
-            }
-            .input-form input, .input-form select, .input-form button {
-                margin: 10px 0;
-            }
-            .categories {
-                flex-direction: column;
-            }
-            .categories .category-card {
-                margin: 10px 0;
-            }
-        }
+      }
     </style>
   </head>
   <body>
     <div class="container">
-        <div class="header">
-            <h1>Dashboard LiveStock</h1>
-            <p>Track your sales, expenses, and inventory</p>
-            
-            <div class="user-info">
-              <!-- Ganti src ikon secara dinamis berdasarkan jenis kelamin pengguna -->
-              <img id="userIcon" alt="User profile picture" height="30" width="30" />
-              <a class="logout" href="index.html">
-                Logout(<span id="usernameDisplay"></span>)
-              </a>
-            </div>
-        </div>
+      <div class="header">
+        <h1>Dashboard LiveStock</h1>
+        <p>Track your sales, expenses, and inventory</p>
 
-        <div class="summary">
-            <div class="card">
-                <h3>Total Masuk</h3>
-                <p class="income" id="totalIncome">0</p>
-            </div>
-            <div class="card">
-                <h3>Total Keluar</h3>
-                <p class="expenses" id="totalExpenses">0</p>
-            </div>
-            <div class="card">
-                <h3>Jumlah Total</h3>
-                <p class="net-total" id="netTotal">0</p>
-            </div>
+        <div class="user-info">
+          <!-- Ganti src ikon secara dinamis berdasarkan jenis kelamin pengguna -->
+          <img
+            id="userIcon"
+            alt="User profile picture"
+            height="30"
+            width="30"
+          />
+          <a class="logout" href="index.html">
+            Logout(<span id="usernameDisplay"></span>)
+          </a>
         </div>
-        <div class="input-form">
-            <label for="categorySelect">Input Menambah Barang:</label>
-            <select id="categorySelect">
-                <option value="A">kandang A</option>
-                <option value="B">kandang B</option>
-                <option value="C">kandang C</option>
-                <option value="D">Kandang D</option>
-                <option value="E">Kandang E</option>
-                <option value="F">Kandang F</option>
-                <option value="G">kandang G</option>
-                <option value="H">Kandang H</option>
-                <option value="I">Kandang I</option>
-                <option value="J">Kandang J</option>
-                <option value="K">Kandang K</option>
-                <option value="L">Kandang L</option>
-                <option value="M">Kandang M</option>
-                <option value="N">Kandang N</option>
-                <option value="O">Kandang O</option>
-                <option value="P">Kandang P</option>
-                <option value="Q">Kandang Q</option>
-                <option value="R">Kandang R</option>
-                <option value="S">Kandang S</option>
-                <option value="T">Kandang T</option>
-                <option value="U">Kandang U</option>
-                <option value="V">Kandang V</option>
-                <option value="W">Kandang W</option>
-                <option value="X">Kandang X</option>
-                <option value="Y">Kandang Y</option>
-                <option value="Z">Kandang Z</option>
-            </select>
-            <input type="text" id="itemName" placeholder="Item Name">
-            <input type="number" id="itemPrice" placeholder="Item Price">
-            <input type="date" id="itemDate">
-            <button onclick="addItem()">Add Item</button>
+      </div>
+
+      <div class="summary">
+        <div class="card">
+          <h3>Total Masuk Sapi</h3>
+          <p class="income" id="totalIncome">Rp0</p>
         </div>
-        <div class="input-form">
-            <label for="expenseCategorySelect">Input Pengeluaran Barang:</label>
-            <select id="expenseCategorySelect">
-                <option value="A">kandang A</option>
-                <option value="B">kandang B</option>
-                <option value="C">kandang C</option>
-                <option value="D">Kandang D</option>
-                <option value="E">Kandang E</option>
-                <option value="F">Kandang F</option>
-                <option value="G">kandang G</option>
-                <option value="H">Kandang H</option>
-                <option value="I">Kandang I</option>
-                <option value="J">Kandang J</option>
-                <option value="K">Kandang K</option>
-                <option value="L">Kandang L</option>
-                <option value="M">Kandang M</option>
-                <option value="N">Kandang N</option>
-                <option value="O">Kandang O</option>
-                <option value="P">Kandang P</option>
-                <option value="Q">Kandang Q</option>
-                <option value="R">Kandang R</option>
-                <option value="S">Kandang S</option>
-                <option value="T">Kandang T</option>
-                <option value="U">Kandang U</option>
-                <option value="V">Kandang V</option>
-                <option value="W">Kandang W</option>
-                <option value="X">Kandang X</option>
-                <option value="Y">Kandang Y</option>
-                <option value="Z">Kandang Z</option>
-            </select>
-            <input type="text" id="expenseItemName" placeholder="Item Name">
-            <input type="number" id="expenseItemPrice" placeholder="Item Price">
-            <input type="date" id="expenseItemDate">
-            <button onclick="addExpense()">Add Expense</button>
+        <div class="card">
+          <h3>Total Keluar Sapi</h3>
+          <p class="expenses" id="totalExpenses">Rp0</p>
         </div>
-        <div class="categories">
-            <div class="category-card" id="categoryA">
-                <h4>Kandang A <span id="categoryA-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryB">
-                <h4>Kandang B <span id="categoryB-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryC">
-                <h4>Kandang C <span id="categoryC-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryD">
-                <h4>Kandang D <span id="categoryD-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryE">
-                <h4>kandang E <span id="categoryE-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryF">
-                <h4>Kandang F <span id="categoryF-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryG">
-                <h4>Kandang G <span id="categoryG-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryH">
-                <h4>Kandang H <span id="categoryH-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryI">
-                <h4>Kandang I <span id="categoryI-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryJ">
-                <h4>Kandang J <span id="categoryJ-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryK">
-                <h4>Kandang K <span id="categoryK-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryL">
-                <h4>Kandang L <span id="categoryL-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryM">
-                <h4>Kandang M <span id="categoryM-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryN">
-                <h4>Kandang N <span id="categoryN-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryO">
-                <h4>Kandang O <span id="categoryO-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryP">
-                <h4>Kandang P <span id="categoryP-count">0 items</span></h4>
-            </div>            
-            <div class="category-card" id="categoryQ">
-                <h4>Kandang Q <span id="categoryQ-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryR">
-                <h4>Kandang R <span id="categoryR-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryS">
-                <h4>Kandang S <span id="categoryS-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryT">
-                <h4>Kandang T <span id="categoryT-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryU">
-                <h4>Kandang U <span id="categoryU-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryV">
-                <h4>Kandang V <span id="categoryV-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryW">
-                <h4>Kandang W <span id="categoryW-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryX">
-                <h4>Kandang X <span id="categoryX-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryY">
-                <h4>Kandang Y <span id="categoryY-count">0 items</span></h4>
-            </div>
-            <div class="category-card" id="categoryZ">
-                <h4>Kandang Z <span id="categoryZ-count">0 items</span></h4>
-            </div>
+        <div class="card">
+          <h3>Jumlah Total</h3>
+          <p class="net-total" id="netTotal">Rp0</p>
         </div>
-        <div class="download-button">
-            <button onclick="downloadCSV()">Download CSV</button>
+      </div>
+      <div class="input-form">
+        <label for="categorySelect">Input Menambah Barang:</label>
+        <select id="categorySelect">
+          <option value="A">kandang A</option>
+          <option value="B">kandang B</option>
+          <option value="C">kandang C</option>
+          <option value="D">Kandang D</option>
+          <option value="E">Kandang E</option>
+          <option value="F">Kandang F</option>
+          <option value="G">kandang G</option>
+          <option value="H">Kandang H</option>
+          <option value="I">Kandang I</option>
+          <option value="J">Kandang J</option>
+          <option value="K">Kandang K</option>
+          <option value="L">Kandang L</option>
+          <option value="M">Kandang M</option>
+          <option value="N">Kandang N</option>
+          <option value="O">Kandang O</option>
+          <option value="P">Kandang P</option>
+          <option value="Q">Kandang Q</option>
+          <option value="R">Kandang R</option>
+          <option value="S">Kandang S</option>
+          <option value="T">Kandang T</option>
+          <option value="U">Kandang U</option>
+          <option value="V">Kandang V</option>
+          <option value="W">Kandang W</option>
+          <option value="X">Kandang X</option>
+          <option value="Y">Kandang Y</option>
+          <option value="Z">Kandang Z</option>
+        </select>
+        <input type="text" id="itemName" placeholder="Item Name" />
+        <input type="number" id="itemPrice" placeholder="Item Ekor" />
+        <input type="date" id="itemDate" />
+        <button onclick="addItem()">Add Item</button>
+      </div>
+      <div class="input-form">
+        <label for="expenseCategorySelect">Input Pengeluaran Barang:</label>
+        <select id="expenseCategorySelect">
+          <option value="A">kandang A</option>
+          <option value="B">kandang B</option>
+          <option value="C">kandang C</option>
+          <option value="D">Kandang D</option>
+          <option value="E">Kandang E</option>
+          <option value="F">Kandang F</option>
+          <option value="G">kandang G</option>
+          <option value="H">Kandang H</option>
+          <option value="I">Kandang I</option>
+          <option value="J">Kandang J</option>
+          <option value="K">Kandang K</option>
+          <option value="L">Kandang L</option>
+          <option value="M">Kandang M</option>
+          <option value="N">Kandang N</option>
+          <option value="O">Kandang O</option>
+          <option value="P">Kandang P</option>
+          <option value="Q">Kandang Q</option>
+          <option value="R">Kandang R</option>
+          <option value="S">Kandang S</option>
+          <option value="T">Kandang T</option>
+          <option value="U">Kandang U</option>
+          <option value="V">Kandang V</option>
+          <option value="W">Kandang W</option>
+          <option value="X">Kandang X</option>
+          <option value="Y">Kandang Y</option>
+          <option value="Z">Kandang Z</option>
+        </select>
+        <input type="text" id="expenseItemName" placeholder="Item Name" />
+        <input type="number" id="expenseItemPrice" placeholder="Item Ekor" />
+        <input type="date" id="expenseItemDate" />
+        <button onclick="addExpense()">Add Pengeluaran</button>
+      </div>
+      <div class="categories">
+        <div class="category-card" id="categoryA">
+          <h4>Kandang A <span id="categoryA-count">0 items</span></h4>
+          <p id="categoryA-total">Total Ekor Kandang A: 0</p>
         </div>
+        <div class="category-card" id="categoryB">
+          <h4>Kandang B <span id="categoryB-count">0 items</span></h4>
+          <p id="categoryB-total">Total Ekor Kandang B: 0</p>
+        </div>
+        <div class="category-card" id="categoryC">
+          <h4>Kandang C <span id="categoryC-count">0 items</span></h4>
+          <p id="categoryC-total">Total Ekor Kandang C: 0</p>
+        </div>
+        <div class="category-card" id="categoryD">
+          <h4>Kandang D <span id="categoryD-count">0 items</span></h4>
+          <p id="categoryD-total">Total Ekor Kandang D: 0</p>
+        </div>
+        <div class="category-card" id="categoryE">
+          <h4>kandang E <span id="categoryE-count">0 items</span></h4>
+          <p id="categoryE-total">Total Ekor Kandang E: 0</p>
+        </div>
+        <div class="category-card" id="categoryF">
+          <h4>Kandang F <span id="categoryF-count">0 items</span></h4>
+          <p id="categoryF-total">Total Ekor Kandang F: 0</p>
+        </div>
+        <div class="category-card" id="categoryG">
+          <h4>Kandang G <span id="categoryG-count">0 items</span></h4>
+          <p id="categoryG-total">Total Ekor Kandang G: 0</p>
+        </div>
+        <div class="category-card" id="categoryH">
+          <h4>Kandang H <span id="categoryH-count">0 items</span></h4>
+          <p id="categoryH-total">Total Ekor Kandang H: 0</p>
+        </div>
+        <div class="category-card" id="categoryI">
+          <h4>Kandang I <span id="categoryI-count">0 items</span></h4>
+          <p id="categoryI-total">Total Ekor Kandang I: 0</p>
+        </div>
+        <div class="category-card" id="categoryJ">
+          <h4>Kandang J <span id="categoryJ-count">0 items</span></h4>
+          <p id="categoryJ-total">Total Ekor Kandang J: 0</p>
+        </div>
+        <div class="category-card" id="categoryK">
+          <h4>Kandang K <span id="categoryK-count">0 items</span></h4>
+          <p id="categoryK-total">Total Ekor Kandang K: 0</p>
+        </div>
+        <div class="category-card" id="categoryL">
+          <h4>Kandang L <span id="categoryL-count">0 items</span></h4>
+          <p id="categoryL-total">Total Ekor Kandang L: 0</p>
+        </div>
+        <div class="category-card" id="categoryM">
+          <h4>Kandang M <span id="categoryM-count">0 items</span></h4>
+          <p id="categoryM-total">Total Ekor Kandang M: 0</p>
+        </div>
+        <div class="category-card" id="categoryN">
+          <h4>Kandang N <span id="categoryN-count">0 items</span></h4>
+          <p id="categoryN-total">Total Ekor Kandang N: 0</p>
+        </div>
+        <div class="category-card" id="categoryO">
+          <h4>Kandang O <span id="categoryO-count">0 items</span></h4>
+          <p id="categoryO-total">Total Ekor Kandang O: 0</p>
+        </div>
+        <div class="category-card" id="categoryP">
+          <h4>Kandang P <span id="categoryP-count">0 items</span></h4>
+          <p id="categoryP-total">Total Ekor Kandang P: 0</p>
+        </div>
+        <div class="category-card" id="categoryQ">
+          <h4>Kandang Q <span id="categoryQ-count">0 items</span></h4>
+          <p id="categoryQ-total">Total Ekor Kandang Q: 0</p>
+        </div>
+        <div class="category-card" id="categoryR">
+          <h4>Kandang R <span id="categoryR-count">0 items</span></h4>
+          <p id="categoryR-total">Total Ekor Kandang R: 0</p>
+        </div>
+        <div class="category-card" id="categoryS">
+          <h4>Kandang S <span id="categoryS-count">0 items</span></h4>
+          <p id="categoryS-total">Total Ekor Kandang S: 0</p>
+        </div>
+        <div class="category-card" id="categoryT">
+          <h4>Kandang T <span id="categoryT-count">0 items</span></h4>
+          <p id="categoryT-total">Total Ekor Kandang T: 0</p>
+        </div>
+        <div class="category-card" id="categoryU">
+          <h4>Kandang U <span id="categoryU-count">0 items</span></h4>
+          <p id="categoryU-total">Total Ekor Kandang U: 0</p>
+        </div>
+        <div class="category-card" id="categoryV">
+          <h4>Kandang V <span id="categoryV-count">0 items</span></h4>
+          <p id="categoryV-total">Total Ekor Kandang V: 0</p>
+        </div>
+        <div class="category-card" id="categoryW">
+          <h4>Kandang W <span id="categoryW-count">0 items</span></h4>
+          <p id="categoryW-total">Total Ekor Kandang W: 0</p>
+        </div>
+        <div class="category-card" id="categoryX">
+          <h4>Kandang X <span id="categoryX-count">0 items</span></h4>
+          <p id="categoryX-total">Total Ekor Kandang X: 0</p>
+        </div>
+        <div class="category-card" id="categoryY">
+          <h4>Kandang Y <span id="categoryY-count">0 items</span></h4>
+          <p id="categoryY-total">Total Ekor Kandang Y: 0</p>
+        </div>
+        <div class="category-card" id="categoryZ">
+          <h4>Kandang Z <span id="categoryZ-count">0 items</span></h4>
+          <p id="categoryZ-total">Total Ekor Kandang Z: 0</p>
+        </div>
+      </div>
+      <div class="download-button">
+        <button onclick="downloadCSV()">Download CSV</button>
+      </div>
     </div>
     <div class="notification" id="notification">Success Menambahkan Barang</div>
+    <div class="notification2" id="notification2">Success Pengeluaran Barang</div>
+    <div class="notification3" id="notification3">Success Menghapus Barang</div>
     <div class="footer">
-        <a href=" https://sociabuzz.com/mza_offc">mza_offc</a>
-        All rights reserved.
+      <a href=" https://sociabuzz.com/mza_offc">mza_offc</a>
+      All rights reserved.
     </div>
     <script>
-     
-     if ("serviceWorker" in navigator) {
-            navigator.serviceWorker
-                .register("service-worker.js")
-                .then(() => console.log("Service Worker Registered"))
-                .catch((error) => console.error("Service Worker Registration Failed:", error));
-        }
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("service-worker.js")
+          .then(() => console.log("Service Worker Registered"))
+          .catch((error) =>
+            console.error("Service Worker Registration Failed:", error)
+          );
+      }
 
-              // Mendapatkan username dan gender dari localStorage
+      // Mendapatkan username dan gender dari localStorage
       const username = localStorage.getItem("username");
       const gender = localStorage.getItem("gender");
 
@@ -417,8 +482,7 @@
         userIcon.src = "Female.png"; // Ganti dengan path ikon perempuan
       }
 
-
-     document.addEventListener("DOMContentLoaded", (event) => {
+      document.addEventListener("DOMContentLoaded", (event) => {
         loadItems();
         updateTotals();
       });
@@ -440,6 +504,7 @@
 
           saveItem(category, itemName, itemPrice, itemDate);
           updateCategoryCount(category);
+          updateCategoryTotal(category, itemPrice); // Update total for the category
           updateTotals();
           showNotification();
         }
@@ -463,8 +528,9 @@
 
           saveItem(category, itemName, itemPrice, itemDate);
           updateCategoryCount(category);
+          updateCategoryTotal(category, itemPrice); // Update total for the category
           updateTotals();
-          showNotification();
+          showNotification2();
         }
       }
 
@@ -482,8 +548,26 @@
         );
         localStorage.setItem("items", JSON.stringify(items));
         updateCategoryCount(category);
+        updateCategoryTotal(category, -itemPrice); // Update total for the category
         updateTotals();
+        showNotification3();
       }
+
+      function updateCategoryCount(category) {
+    const categoryCard = document.getElementById(`category${category}`);
+    if (!categoryCard ) {
+        console.error(`Category card with ID category${category} not found.`);
+        return;
+    }
+    const itemCount = categoryCard.getElementsByTagName("p").length;
+    document.getElementById(`category${category}-count`).innerText = `${itemCount} items`;
+}
+function updateCategoryTotal(category, priceChange) {
+    const totalElement = document.getElementById(`category${category}-total`);
+    let currentTotal = parseFloat(totalElement.innerText.replace(/[^0-9.-]+/g, "")) || 0;
+    currentTotal += priceChange; // Update total with the price change
+    totalElement.innerText = `Total Ekor Kandang ${category}: ${currentTotal.toLocaleString("id-ID")}`;
+}
 
       function updateTotals() {
         let totalIncome = 0;
@@ -515,7 +599,23 @@
         notification.style.display = "block";
         setTimeout(() => {
           notification.style.display = "none";
-        }, 4000);
+        }, 3000);
+      }
+
+      function showNotification2() {
+        const notification = document.getElementById("notification2");
+        notification2.style.display = "block";
+        setTimeout(() => {
+          notification.style.display = "none";
+        }, 3000);
+      }
+
+      function showNotification3() {
+        const notification = document.getElementById("notification3");
+        notification3.style.display = "block";
+        setTimeout(() => {
+          notification.style.display = "none";
+        }, 3000);
       }
 
       function saveItem(category, itemName, itemPrice, itemDate) {
@@ -545,94 +645,72 @@
         });
       }
 
-      function updateCategoryCount(category) {
-        const categoryCard = document.getElementById(`category${category}`);
-        const itemCount = categoryCard.getElementsByTagName("p").length;
-        document.getElementById(
-          `category${category}-count`
-        ).innerText = `${itemCount} items`;
-      }
 
       function downloadCSV() {
-        let items = JSON.parse(localStorage.getItem("items")) || [];
-        let csvContent = "data:text/csv;charset=utf-8,";
-        csvContent +=
-          "Kandang A,Kandang B,Kandang C,Kandang D,Kandang E,Kandang F,Kandang G,Kandang H,Kandang I,Kandang J,Kandang K, Kandang L, Kandang M,kandang N, Kandang O,Kandang P, Kandang Q,Kandang R,Kandang S, Kandang T, Kandang U, Kandang V,Kandang W,Kandang X,Kandang Y, Kandang Z, \n";
+    let items = JSON.parse(localStorage.getItem("items")) || [];
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Kandang A,Kandang B,Kandang C,Kandang D,Kandang E,Kandang F,Kandang G,Kandang H,Kandang I,Kandang J,Kandang K,Kandang L,Kandang M,Kandang N,Kandang O,Kandang P,Kandang Q,Kandang R,Kandang S,Kandang T,Kandang U,Kandang V,Kandang W,Kandang X,Kandang Y,Kandang Z,\n";
 
-        // Get all items by category
-        const categories = [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E",
-          "F",
-          "G",
-          "H",
-          "I",
-          "J",
-          "K",
-          "L",
-          "M",
-          "N",
-          "O",
-          "P",
-          "Q",
-          "R",
-          "S",
-          "T",
-          "U",
-          "V",
-          "W",
-          "X",
-          "Y",
-          "Z",
-        ];
-        const categoryItems = categories.map((category) => {
-          return items.filter((item) => item.category === category);
-        });
+    // Daftar kategori
+    const categories = [
+        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+        "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+        "U", "V", "W", "X", "Y", "Z"
+    ];
 
-        // Get the maximum number of items in any category
-        const maxItems = Math.max(
-          ...categoryItems.map((items) => items.length)
-        );
+    // Menghitung total ekor per kategori
+    const categoryTotals = {};
+    categories.forEach(category => {
+        categoryTotals[category] = 0; // Inisialisasi total untuk setiap kategori
+    });
 
-        // Add items to CSV content
-        for (let i = 0; i < maxItems; i++) {
-          let row = "";
-          categoryItems.forEach((items) => {
+    // Ambil semua item berdasarkan kategori
+    const categoryItems = categories.map(category => {
+        const itemsInCategory = items.filter(item => item.category === category);
+        // Hitung total ekor untuk kategori ini
+        const totalEkor = itemsInCategory.reduce((sum, item) => sum + item.itemPrice, 0);
+        categoryTotals[category] = totalEkor; // Simpan total ekor per kategori
+        return itemsInCategory;
+    });
+
+    // Dapatkan jumlah maksimum item di kategori mana pun
+    const maxItems = Math.max(...categoryItems.map(items => items.length));
+
+    // Tambahkan item ke konten CSV
+    for (let i = 0; i < maxItems; i++) {
+        let row = "";
+        categoryItems.forEach(items => {
             if (items[i]) {
-              row += `${items[i].itemName} ${items[i].itemPrice.toLocaleString(
-                "id-ID"
-              )} Ekor ${items[i].itemDate},`;
+                row += `${items[i].itemName} ${items[i].itemPrice.toLocaleString("id-ID")} Ekor ${items[i].itemDate},`;
             } else {
-              row += ",";
+                row += ",";
             }
-          });
-          csvContent += row.slice(0, -1) + "\n";
-        }
+        });
+        csvContent += row.slice(0, -1) + "\n"; // Hapus koma terakhir
+    }
 
-        const totalIncome = document
-          .getElementById("totalIncome")
-          .innerText.replace(/[^0-9.-]+/g, "");
-        const totalExpenses = document
-          .getElementById("totalExpenses")
-          .innerText.replace(/[^0-9.-]+/g, "");
-        const netTotal = document
-          .getElementById("netTotal")
-          .innerText.replace(/[^0-9.-]+/g, "");
+    // Tambahkan total ekor per kategori ke CSV
+    csvContent += "\nTotal Ekor per Kategori:\n";
+    categories.forEach(category => {
+        csvContent += `Kandang ${category},${categoryTotals[category].toLocaleString("id-ID")} Ekor\n`;
+    });
 
-        csvContent += `\nTotal Masuk,${totalIncome}\n`;
-        csvContent += `Total Pengeluaran,${totalExpenses}\n`;
-        csvContent += `Jumlah Total,${netTotal}\n`;
+    // Tambahkan total income, expenses, dan net total
+    const totalIncome = document.getElementById("totalIncome").innerText.replace(/[^0-9.-]+/g, "");
+    const totalExpenses = document.getElementById("totalExpenses").innerText.replace(/[^0-9.-]+/g, "");
+    const netTotal = document.getElementById("netTotal").innerText.replace(/[^0-9.-]+/g, "");
 
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "Laporan LiveStock.csv");
-        document.body.appendChild(link);
-        link.click();
-      }
+    csvContent += `\nTotal Income,${totalIncome}\n`;
+    csvContent += `Total Expenses,${totalExpenses}\n`;
+    csvContent += `Net Total,${netTotal}\n`;
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "Laporan LiveStock.csv");
+    document.body.appendChild(link);
+    link.click();
+}
     </script>
   </body>
 </html>
