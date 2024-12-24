@@ -700,9 +700,9 @@ function updateCategoryTotal(category, priceChange) {
     const totalExpenses = document.getElementById("totalExpenses").innerText.replace(/[^0-9.-]+/g, "");
     const netTotal = document.getElementById("netTotal").innerText.replace(/[^0-9.-]+/g, "");
 
-    csvContent += `\nTotal Income,${totalIncome}\n`;
-    csvContent += `Total Expenses,${totalExpenses}\n`;
-    csvContent += `Net Total,${netTotal}\n`;
+    csvContent += `\nTotal Pemasukan Sapi,${totalIncome}\n`;
+    csvContent += `Total Keluar Sapi,${totalExpenses}\n`;
+    csvContent += `Jumlah Total,${netTotal}\n`;
 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
