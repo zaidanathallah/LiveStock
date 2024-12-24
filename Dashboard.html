@@ -220,16 +220,16 @@
 
         <div class="summary">
             <div class="card">
-                <h3>Total Masuk Sapi</h3>
-                <p class="income" id="totalIncome">Rp0</p>
+                <h3>Total Masuk</h3>
+                <p class="income" id="totalIncome">0</p>
             </div>
             <div class="card">
-                <h3>Total Keluar Sapi</h3>
-                <p class="expenses" id="totalExpenses">Rp0</p>
+                <h3>Total Keluar</h3>
+                <p class="expenses" id="totalExpenses">0</p>
             </div>
             <div class="card">
                 <h3>Jumlah Total</h3>
-                <p class="net-total" id="netTotal">Rp0</p>
+                <p class="net-total" id="netTotal">0</p>
             </div>
         </div>
         <div class="input-form">
@@ -622,9 +622,9 @@
           .getElementById("netTotal")
           .innerText.replace(/[^0-9.-]+/g, "");
 
-        csvContent += `\nTotal Income,${totalIncome}\n`;
-        csvContent += `Total Expenses,${totalExpenses}\n`;
-        csvContent += `Net Total,${netTotal}\n`;
+        csvContent += `\nTotal Income,${Total-Masuk}\n`;
+        csvContent += `Total Expenses,${total-Keluar}\n`;
+        csvContent += `Net Total,${Jumlah-Total}\n`;
 
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");
