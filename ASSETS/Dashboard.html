@@ -622,14 +622,14 @@
           .getElementById("netTotal")
           .innerText.replace(/[^0-9.-]+/g, "");
 
-        csvContent += `\nTotal Income,${Totl-Masuk}\n`;
-        csvContent += `Total Expenses,${Total-Keluar}\n`;
-        csvContent += `Net Total,${Jumlah-Total}\n`;
+        csvContent += `\nTotal Masuk,${totalIncome}\n`;
+        csvContent += `Total Pengeluaran,${totalExpenses}\n`;
+        csvContent += `Jumlah Total,${netTotal}\n`;
 
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");
         link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "Laporan Sapi.csv");
+        link.setAttribute("download", "Laporan LiveStock.csv");
         document.body.appendChild(link);
         link.click();
       }
