@@ -268,6 +268,7 @@
           <p class="net-total" id="netTotal">Rp0</p>
         </div>
       </div>
+    <!-- Input Menambah Barang -->
       <div class="input-form">
         <label for="categorySelect">Input Menambah Barang:</label>
         <select id="categorySelect">
@@ -303,6 +304,7 @@
         <input type="date" id="itemDate" />
         <button onclick="addItem()">Add Item</button>
       </div>
+<!-- Input Pengeluaran Barang -->
       <div class="input-form">
         <label for="expenseCategorySelect">Input Pengeluaran Barang:</label>
         <select id="expenseCategorySelect">
@@ -338,6 +340,7 @@
         <input type="date" id="expenseItemDate" />
         <button onclick="addExpense()">Add Pengeluaran</button>
       </div>
+
       <div class="categories">
         <div class="category-card" id="categoryA">
           <h4>Kandang A <span id="categoryA-count">0 items</span></h4>
@@ -449,7 +452,9 @@
       </div>
     </div>
     <div class="notification" id="notification">Success Menambahkan Barang</div>
-    <div class="notification2" id="notification2">Success Pengeluaran Barang</div>
+    <div class="notification2" id="notification2">
+      Success Pengeluaran Barang
+    </div>
     <div class="notification3" id="notification3">Success Menghapus Barang</div>
     <div class="footer">
       <a href=" https://sociabuzz.com/mza_offc">mza_offc</a>
@@ -482,10 +487,18 @@
         userIcon.src = "Female.png"; // Ganti dengan path ikon perempuan
       }
 
+      // Panggil fungsi ini saat halaman dimuat
       document.addEventListener("DOMContentLoaded", (event) => {
+        console.log(
+          "Category Totals on Load:",
+          JSON.parse(localStorage.getItem("categoryTotals"))
+        );
         loadItems();
+        loadCategoryTotals();
         updateTotals();
       });
+
+      //input Penambahan Barang
       function addItem() {
         const category = document.getElementById("categorySelect").value;
         const itemName = document.getElementById("itemName").value;
@@ -503,13 +516,14 @@
           categoryCard.appendChild(newItem);
 
           saveItem(category, itemName, itemPrice, itemDate);
-          updateCategoryCount(category);
-          updateCategoryTotal(category, itemPrice); // Update total for the category
+          updateCategoryCount(category); // Update jumlah item
+          updateCategoryTotal(category, itemPrice); // Update total ekor
           updateTotals();
           showNotification();
         }
       }
 
+      //input Pengeluaran Barang
       function addExpense() {
         const category = document.getElementById("expenseCategorySelect").value;
         const itemName = document.getElementById("expenseItemName").value;
@@ -527,15 +541,19 @@
           categoryCard.appendChild(newItem);
 
           saveItem(category, itemName, itemPrice, itemDate);
-          updateCategoryCount(category);
-          updateCategoryTotal(category, itemPrice); // Update total for the category
+          updateCategoryCount(category); // Update jumlah item
+          updateCategoryTotal(category, itemPrice); // Update total ekor
           updateTotals();
           showNotification2();
         }
       }
 
+      // fungsi deleteitem
       function deleteItem(element, category, itemName, itemPrice, itemDate) {
+        // Hapus elemen dari DOM
         element.parentElement.remove();
+
+        // Ambil data item dari localStorage
         let items = JSON.parse(localStorage.getItem("items")) || [];
         items = items.filter(
           (item) =>
@@ -547,32 +565,125 @@
             )
         );
         localStorage.setItem("items", JSON.stringify(items));
+
+        // Perbarui total kategori
+        updateCategoryTotal(category, -itemPrice);
+
+        // Perbarui jumlah item
         updateCategoryCount(category);
-        updateCategoryTotal(category, -itemPrice); // Update total for the category
+
+        // Perbarui total keseluruhan
         updateTotals();
-        showNotification3();
       }
 
+      // Update localStorage untuk total kategori
+
       function updateCategoryCount(category) {
-    const categoryCard = document.getElementById(`category${category}`);
-    if (!categoryCard ) {
-        console.error(`Category card with ID category${category} not found.`);
-        return;
-    }
-    const itemCount = categoryCard.getElementsByTagName("p").length;
-    document.getElementById(`category${category}-count`).innerText = `${itemCount} items`;
-}
-function updateCategoryTotal(category, priceChange) {
-    const totalElement = document.getElementById(`category${category}-total`);
-    let currentTotal = parseFloat(totalElement.innerText.replace(/[^0-9.-]+/g, "")) || 0;
-    currentTotal += priceChange; // Update total with the price change
-    totalElement.innerText = `Total Ekor Kandang ${category}: ${currentTotal.toLocaleString("id-ID")}`;
-}
+        const categoryCard = document.getElementById(`category${category}`);
+        if (!categoryCard) {
+          console.error(`Category card with ID category${category} not found.`);
+          return;
+        }
+        const itemCount = categoryCard.getElementsByTagName("p").length; // Menghitung jumlah elemen <p> di dalam kategori
+        document.getElementById(
+          `category${category}-count`
+        ).innerText = `${itemCount} items`;
+      }
+
+      function updateCategoryTotal(category, priceChange) {
+        const totalElement = document.getElementById(
+          `category${category}-total`
+        );
+        let categoryTotals =
+          JSON.parse(localStorage.getItem("categoryTotals")) || {};
+
+        // Ambil total saat ini dari localStorage (jika ada)
+        let currentTotal = categoryTotals[category] || 0;
+
+        // Perbarui total berdasarkan perubahan harga (termasuk negatif)
+        currentTotal += priceChange;
+
+        // Tampilkan total terbaru di elemen HTML
+        totalElement.innerText = `Total Ekor Kandang ${category}: ${currentTotal.toLocaleString(
+          "id-ID"
+        )} Ekor`;
+
+        // Simpan total terbaru kembali ke localStorage
+        categoryTotals[category] = currentTotal;
+        localStorage.setItem("categoryTotals", JSON.stringify(categoryTotals));
+      }
+
+      function loadCategoryTotals() {
+        let categoryTotals =
+          JSON.parse(localStorage.getItem("categoryTotals")) || {};
+        const categories = [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H",
+          "I",
+          "J",
+          "K",
+          "L",
+          "M",
+          "N",
+          "O",
+          "P",
+          "Q",
+          "R",
+          "S",
+          "T",
+          "U",
+          "V",
+          "W",
+          "X",
+          "Y",
+          "Z",
+        ];
+
+        categories.forEach((category) => {
+          const totalElement = document.getElementById(
+            `category${category}-total`
+          );
+          const categoryCard = document.getElementById(`category${category}`);
+          const itemCount = categoryCard
+            ? categoryCard.getElementsByTagName("p").length
+            : 0;
+
+          // Jika total kategori tidak ada, inisialisasi dengan 0
+          if (!categoryTotals[category]) {
+            categoryTotals[category] = 0;
+          }
+
+          // Tampilkan total kategori di elemen HTML
+          if (totalElement) {
+            totalElement.innerText = `Total Ekor Kandang ${category}: ${categoryTotals[
+              category
+            ].toLocaleString("id-ID")} Ekor`;
+          }
+
+          // Perbarui jumlah item
+          const countElement = document.getElementById(
+            `category${category}-count`
+          );
+          if (countElement) {
+            countElement.innerText = `${itemCount} items`;
+          }
+        });
+
+        // Simpan pembaruan kembali ke localStorage
+        localStorage.setItem("categoryTotals", JSON.stringify(categoryTotals));
+      }
 
       function updateTotals() {
         let totalIncome = 0;
         let totalExpenses = 0;
         let items = JSON.parse(localStorage.getItem("items")) || [];
+
         items.forEach((item) => {
           if (item.itemPrice > 0) {
             totalIncome += item.itemPrice;
@@ -622,95 +733,203 @@ function updateCategoryTotal(category, priceChange) {
         let items = JSON.parse(localStorage.getItem("items")) || [];
         items.push({ category, itemName, itemPrice, itemDate });
         localStorage.setItem("items", JSON.stringify(items));
+        console.log("Items saved:", items); // Log untuk memeriksa data yang disimpan
       }
 
       function loadItems() {
         let items = JSON.parse(localStorage.getItem("items")) || [];
+        const categories = [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H",
+          "I",
+          "J",
+          "K",
+          "L",
+          "M",
+          "N",
+          "O",
+          "P",
+          "Q",
+          "R",
+          "S",
+          "T",
+          "U",
+          "V",
+          "W",
+          "X",
+          "Y",
+          "Z",
+        ];
+
+        // Reset kategori sebelum memuat item
+        categories.forEach((category) => {
+          const categoryCard = document.getElementById(`category${category}`);
+          if (categoryCard) {
+            categoryCard.innerHTML = `<h4>Kandang ${category} <span id="category${category}-count">0 items</span></h4>
+                                      <p id="category${category}-total">Total Ekor Kandang ${category}: 0 Ekor</p>`;
+          }
+        });
+
+        // Muat data dari localStorage
         items.forEach((item) => {
           const categoryCard = document.getElementById(
             `category${item.category}`
           );
-          const newItem = document.createElement("p");
-          newItem.innerHTML = `<span>${
-            item.itemName
-          }</span><span>${item.itemPrice.toLocaleString(
-            "id-ID"
-          )} Ekor</span><span>${
-            item.itemDate
-          }</span><i class="fas fa-trash delete-btn" onclick="deleteItem(this, '${
-            item.category
-          }', '${item.itemName}', ${item.itemPrice}, '${item.itemDate}')"></i>`;
-          categoryCard.appendChild(newItem);
-          updateCategoryCount(item.category);
+          if (categoryCard) {
+            const newItem = document.createElement("p");
+            newItem.innerHTML = `<span>${
+              item.itemName
+            }</span><span>${item.itemPrice.toLocaleString(
+              "id-ID"
+            )} Ekor</span><span>${
+              item.itemDate
+            }</span><i class="fas fa-trash delete-btn" onclick="deleteItem(this, '${
+              item.category
+            }', '${item.itemName}', ${item.itemPrice}, '${
+              item.itemDate
+            }')"></i>`;
+            categoryCard.appendChild(newItem);
+          }
+        });
+
+        // Perbarui total ekor dan jumlah item
+        categories.forEach((category) => {
+          let totalEkor = 0;
+          const categoryItems = items.filter(
+            (item) => item.category === category
+          );
+          categoryItems.forEach((item) => {
+            totalEkor += item.itemPrice;
+          });
+
+          const totalElement = document.getElementById(
+            `category${category}-total`
+          );
+          const countElement = document.getElementById(
+            `category${category}-count`
+          );
+
+          if (totalElement && countElement) {
+            totalElement.innerText = `Total Ekor Kandang ${category}: ${totalEkor.toLocaleString(
+              "id-ID"
+            )} Ekor`;
+            countElement.innerText = `${categoryItems.length} items`;
+          }
         });
       }
 
-
       function downloadCSV() {
-    let items = JSON.parse(localStorage.getItem("items")) || [];
-    let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += "Kandang A,Kandang B,Kandang C,Kandang D,Kandang E,Kandang F,Kandang G,Kandang H,Kandang I,Kandang J,Kandang K,Kandang L,Kandang M,Kandang N,Kandang O,Kandang P,Kandang Q,Kandang R,Kandang S,Kandang T,Kandang U,Kandang V,Kandang W,Kandang X,Kandang Y,Kandang Z,\n";
+        let items = JSON.parse(localStorage.getItem("items")) || [];
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent +=
+          "Kandang A,Kandang B,Kandang C,Kandang D,Kandang E,Kandang F,Kandang G,Kandang H,Kandang I,Kandang J,Kandang K,Kandang L,Kandang M,Kandang N,Kandang O,Kandang P,Kandang Q,Kandang R,Kandang S,Kandang T,Kandang U,Kandang V,Kandang W,Kandang X,Kandang Y,Kandang Z,\n";
 
-    // Daftar kategori
-    const categories = [
-        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
-        "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
-        "U", "V", "W", "X", "Y", "Z"
-    ];
+        // Daftar kategori
+        const categories = [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H",
+          "I",
+          "J",
+          "K",
+          "L",
+          "M",
+          "N",
+          "O",
+          "P",
+          "Q",
+          "R",
+          "S",
+          "T",
+          "U",
+          "V",
+          "W",
+          "X",
+          "Y",
+          "Z",
+        ];
 
-    // Menghitung total ekor per kategori
-    const categoryTotals = {};
-    categories.forEach(category => {
-        categoryTotals[category] = 0; // Inisialisasi total untuk setiap kategori
-    });
-
-    // Ambil semua item berdasarkan kategori
-    const categoryItems = categories.map(category => {
-        const itemsInCategory = items.filter(item => item.category === category);
-        // Hitung total ekor untuk kategori ini
-        const totalEkor = itemsInCategory.reduce((sum, item) => sum + item.itemPrice, 0);
-        categoryTotals[category] = totalEkor; // Simpan total ekor per kategori
-        return itemsInCategory;
-    });
-
-    // Dapatkan jumlah maksimum item di kategori mana pun
-    const maxItems = Math.max(...categoryItems.map(items => items.length));
-
-    // Tambahkan item ke konten CSV
-    for (let i = 0; i < maxItems; i++) {
-        let row = "";
-        categoryItems.forEach(items => {
-            if (items[i]) {
-                row += `${items[i].itemName} ${items[i].itemPrice.toLocaleString("id-ID")} Ekor ${items[i].itemDate},`;
-            } else {
-                row += ",";
-            }
+        // Menghitung total ekor per kategori
+        const categoryTotals = {};
+        categories.forEach((category) => {
+          categoryTotals[category] = 0; // Inisialisasi total untuk setiap kategori
         });
-        csvContent += row.slice(0, -1) + "\n"; // Hapus koma terakhir
-    }
 
-    // Tambahkan total ekor per kategori ke CSV
-    csvContent += "\nTotal Ekor per Kategori:\n";
-    categories.forEach(category => {
-        csvContent += `Kandang ${category},${categoryTotals[category].toLocaleString("id-ID")} Ekor\n`;
-    });
+        // Ambil semua item berdasarkan kategori
+        const categoryItems = categories.map((category) => {
+          const itemsInCategory = items.filter(
+            (item) => item.category === category
+          );
+          // Hitung total ekor untuk kategori ini
+          const totalEkor = itemsInCategory.reduce(
+            (sum, item) => sum + item.itemPrice,
+            0
+          );
+          categoryTotals[category] = totalEkor; // Simpan total ekor per kategori
+          return itemsInCategory;
+        });
 
-    // Tambahkan total income, expenses, dan net total
-    const totalIncome = document.getElementById("totalIncome").innerText.replace(/[^0-9.-]+/g, "");
-    const totalExpenses = document.getElementById("totalExpenses").innerText.replace(/[^0-9.-]+/g, "");
-    const netTotal = document.getElementById("netTotal").innerText.replace(/[^0-9.-]+/g, "");
+        // Dapatkan jumlah maksimum item di kategori mana pun
+        const maxItems = Math.max(
+          ...categoryItems.map((items) => items.length)
+        );
 
-    csvContent += `\nTotal Pemasukan Sapi,${totalIncome}\n`;
-    csvContent += `Total Keluar Sapi,${totalExpenses}\n`;
-    csvContent += `Jumlah Total,${netTotal}\n`;
+        // Tambahkan item ke konten CSV
+        for (let i = 0; i < maxItems; i++) {
+          let row = "";
+          categoryItems.forEach((items) => {
+            if (items[i]) {
+              row += `${items[i].itemName} ${items[i].itemPrice.toLocaleString(
+                "id-ID"
+              )} Ekor ${items[i].itemDate},`;
+            } else {
+              row += ",";
+            }
+          });
+          csvContent += row.slice(0, -1) + "\n"; // Hapus koma terakhir
+        }
 
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "Laporan LiveStock.csv");
-    document.body.appendChild(link);
-    link.click();
-}
+        // Tambahkan total ekor per kategori ke CSV
+        csvContent += "\nTotal Ekor per Kategori:\n";
+        categories.forEach((category) => {
+          csvContent += `Kandang ${category},${categoryTotals[
+            category
+          ].toLocaleString("id-ID")} Ekor\n`;
+        });
+
+        // Tambahkan total income, expenses, dan net total
+        const totalIncome = document
+          .getElementById("totalIncome")
+          .innerText.replace(/[^0-9.-]+/g, "");
+        const totalExpenses = document
+          .getElementById("totalExpenses")
+          .innerText.replace(/[^0-9.-]+/g, "");
+        const netTotal = document
+          .getElementById("netTotal")
+          .innerText.replace(/[^0-9.-]+/g, "");
+
+        csvContent += `\nTotal Pemasukan Sapi,${totalIncome}\n`;
+        csvContent += `Total Keluar Sapi,${totalExpenses}\n`;
+        csvContent += `Jumlah Total,${netTotal}\n`;
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "Laporan LiveStock.csv");
+        document.body.appendChild(link);
+        link.click();
+      }
     </script>
   </body>
 </html>
